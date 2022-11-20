@@ -9,6 +9,8 @@ builder.Services.AddSwaggerConfiguration();
 
 ConfigurationManager configuration = builder.Configuration;
 
+builder.Services.AddJwtConfiguration(configuration);
+
 builder.Services.AddDependencies(configuration);
 
 var app = builder.Build();
@@ -22,7 +24,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerConfiguration();
 }
 
-app.UseAuthorization();
+app.UseJwtConfiguration();
 
 app.MapControllers();
 

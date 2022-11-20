@@ -1,6 +1,5 @@
 ﻿using EGestor.Domain.Repositories;
 using EGestor.Infra.Contexts;
-using Microsoft.EntityFrameworkCore;
 
 namespace EGestor.Infra.Repositories;
 

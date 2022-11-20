@@ -13,6 +13,19 @@ public class UsuarioRepository : IUsuarioRepository
         _context = context;
     }
 
+    public async Task<Funcao?> BuscarFuncaoPorId(Guid id)
+    {
+        return await _context.Funcoes.FindAsync(id);
+    }
+
+    public async Task<Usuario?> BuscarPorLogin(string login)
+    {
+        return await _context.Usuario
+            .AsNoTracking()
+            .Include(x => x.Funcoes)
+            .FirstOrDefaultAsync(x => x.Login == login);
+    }
+
     public async Task Inserir(Usuario usuario)
     {
         await _context.Usuario.AddAsync(usuario);

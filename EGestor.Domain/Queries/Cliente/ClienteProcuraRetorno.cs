@@ -1,10 +1,11 @@
 ﻿namespace EGestor.Domain.Queries;
 
-public class ClienteProcura
+public class ClienteProcuraRetorno
 {
-    public ClienteProcura(Guid id, string nome, string apelido, string email, bool ativo)
+    public ClienteProcuraRetorno(Guid id, Guid pessoaId, string nome, string apelido, string email, bool ativo)
     {
         Id = id;
+        PessoaId = pessoaId;
         Nome = nome;
         Apelido = apelido;
         Email = email;
@@ -12,6 +13,7 @@ public class ClienteProcura
     }
 
     public Guid Id { get; set; }
+    public Guid PessoaId { get; set; }
     public string Nome { get; set; }
     public string Apelido { get; set; }
     public string Email { get; set; }

@@ -16,6 +16,9 @@ public class Usuario : Entity
     public string Senha { get; private set; }
     public Guid PessoaId { get; private set; }
 
+    public void setSenha(string senha) =>
+        Senha = senha;
+
     public virtual Pessoa Pessoa { get; set; } = null!;
     public virtual ICollection<Lancamento> Lancamentos { get; set; } = null!;
     public virtual ICollection<Funcao> Funcoes { get; set; } = null!;

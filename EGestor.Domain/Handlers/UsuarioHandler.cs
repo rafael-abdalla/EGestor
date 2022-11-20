@@ -4,6 +4,7 @@ using EGestor.Domain.Repositories;
 using EGestor.Shared.Commands;
 using FluentValidator;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace EGestor.Domain.Handlers;
 
@@ -24,6 +25,8 @@ public class UsuarioHandler :
     {
         var usuario = new Usuario(command.Login, command.Senha, command.PessoaId);
 
+        ConverterSenhaEmHash(usuario);
+
         AddNotifications(usuario.Notifications);
 
         if (usuario.Invalid)
@@ -32,6 +35,16 @@ public class UsuarioHandler :
         }
 
         await _uow.BeginTransaction();
+
+
+        List<Funcao> funcoes = new();
+        foreach (var funcaoId in command.Funcoes)
+        {
+            var funcao = await _repository.BuscarFuncaoPorId(funcaoId);
+            funcoes.Add(funcao!);
+        }
+
+        usuario.Funcoes = funcoes;
 
         await _repository.Inserir(usuario);
 
@@ -46,5 +59,12 @@ public class UsuarioHandler :
         }
 
         return await Task.FromResult(new CommandResult(true, "Cadastrado", new { usuario.Id, usuario.Login }));
+    }
+
+    private void ConverterSenhaEmHash(Usuario usuario)
+    {
+        var passwordHasher = new PasswordHasher<Usuario>();
+        var senhaComHash = passwordHasher.HashPassword(usuario, usuario.Senha);
+        usuario.setSenha(senhaComHash);
     }
 }
