@@ -14,6 +14,8 @@ public class ClienteConfiguration : IEntityTypeConfiguration<Cliente>
         builder.Property(x => x.Id).IsRequired().ValueGeneratedNever();
 
         builder.Property(x => x.PessoaId).IsRequired();
+        builder.Property(x => x.LimiteCredito);
+        builder.Property(x => x.Observacao).HasMaxLength(1000);
         builder.Property(x => x.Ativo).IsRequired();
 
         builder.HasOne(x => x.Pessoa).WithMany(x => x.Clientes).HasForeignKey(x => x.PessoaId);

@@ -10,28 +10,20 @@ namespace EGestor.Api.Extensions;
 
 public static class DependencyRegisterExtension
 {
-    public static void AddDependencies(this IServiceCollection services, IConfiguration configuration)
+    public static void AddDependencies(this IServiceCollection services)
     {
         var assembly = AppDomain.CurrentDomain.Load("EGestor.Domain");
         services.AddMediatR(assembly);
-
-        services.AddDbContext<EGestorContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<IClienteService, ClienteService>();
         services.AddScoped<IClienteRepository, ClienteRepository>();
 
+        services.AddScoped<IFuncionarioService, FuncionarioService>();
+        services.AddScoped<IFuncionarioRepository, FuncionarioRepository>();
+
         services.AddScoped<IUsuarioService, UsuarioService>();
         services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-    }
-
-    public static void UseDependencies(this IApplicationBuilder app)
-    {
-        using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
-        using var context = serviceScope.ServiceProvider.GetService<EGestorContext>()!;
-        context.Database.Migrate();
-        context.Database.EnsureCreated();
     }
 }

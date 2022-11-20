@@ -2,9 +2,9 @@
 
 public class Lancamento
 {
-    public Lancamento(Guid id, Guid usuarioId)
+    public Lancamento(Guid usuarioId)
     {
-        Id = id;
+        Id = Guid.NewGuid();
         UsuarioId = usuarioId;
         Criacao = DateTime.Now;
     }
@@ -14,4 +14,5 @@ public class Lancamento
     public DateTime Criacao { get; private set; }
 
     public virtual Usuario Usuario { get; set; } = null!;
+    public virtual ICollection<Lancamento> Lancamentos { get; set; } = null!;
 }

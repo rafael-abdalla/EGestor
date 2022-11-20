@@ -1,5 +1,4 @@
 ﻿using EGestor.Domain.Commands;
-using EGestor.Domain.Entities;
 using EGestor.Domain.Services;
 using EGestor.Shared.Commands;
 using Microsoft.AspNetCore.Mvc;
@@ -8,11 +7,11 @@ namespace EGestor.Api.Controllers;
 
 [Route("v1/api/[controller]")]
 [ApiController]
-public class ClienteController : ControllerBase
+public class FuncionarioController : ControllerBase
 {
-    private readonly IClienteService _service;
+    private readonly IFuncionarioService _service;
 
-    public ClienteController(IClienteService service)
+    public FuncionarioController(IFuncionarioService service)
     {
         _service = service;
     }
@@ -29,12 +28,8 @@ public class ClienteController : ControllerBase
     [ProducesResponseType(typeof(CommandResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(CommandResult), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(CommandResult), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Inserir([FromBody] InserirClienteCommand command)
+    public async Task<IActionResult> Inserir([FromBody] InserirFuncionarioCommand command)
     {
-        var retorno = await _service.Inserir(command);
-        if (retorno.Success)
-            return Ok(retorno);
-
-        return BadRequest(retorno);
+        return Ok(await _service.Inserir(command));
     }
 }

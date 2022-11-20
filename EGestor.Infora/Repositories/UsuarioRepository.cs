@@ -18,6 +18,11 @@ public class UsuarioRepository : IUsuarioRepository
         return await _context.Funcoes.FindAsync(id);
     }
 
+    public async Task<List<Funcao>> BuscarFuncoes()
+    {
+        return await _context.Funcoes.AsNoTracking().ToListAsync();
+    }
+
     public async Task<Usuario?> BuscarPorLogin(string login)
     {
         return await _context.Usuario

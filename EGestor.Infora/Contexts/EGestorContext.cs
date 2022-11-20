@@ -11,6 +11,7 @@ public class EGestorContext : DbContext
 
     public DbSet<Lancamento> Lancamentos { get; set; }
     public DbSet<Pessoa> Pessoa { get; set; }
+    public DbSet<Funcionario> Funcionarios { get; set; }
     public DbSet<Cliente> Clientes { get; set; }
     public DbSet<Funcao> Funcoes { get; set; }
     public DbSet<Usuario> Usuario { get; set; }
@@ -21,6 +22,7 @@ public class EGestorContext : DbContext
 
         modelBuilder.ApplyConfiguration(new LancamentoConfiguration());
         modelBuilder.ApplyConfiguration(new PessoaConfiguration());
+        modelBuilder.ApplyConfiguration(new FuncionarioConfiguration());
         modelBuilder.ApplyConfiguration(new ClienteConfiguration());
         modelBuilder.ApplyConfiguration(new FuncaoConfiguration());
         modelBuilder.ApplyConfiguration(new UsuarioConfiguration());

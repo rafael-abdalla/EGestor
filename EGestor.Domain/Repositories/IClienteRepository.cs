@@ -1,6 +1,4 @@
-﻿using EGestor.Domain.Entities;
-
-namespace EGestor.Domain.Repositories;
+﻿namespace EGestor.Domain.Repositories;
 
 public interface IClienteRepository
 {

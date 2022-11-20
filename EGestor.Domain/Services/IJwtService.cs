@@ -1,6 +1,4 @@
-﻿using EGestor.Domain.Entities;
-
-namespace EGestor.Domain.Services;
+﻿namespace EGestor.Domain.Services;
 
 public interface IJwtService
 {

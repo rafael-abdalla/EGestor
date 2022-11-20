@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EGestor.Infra.Migrations
 {
     [DbContext(typeof(EGestorContext))]
-    [Migration("20221120030622_PrimeiraMigration")]
+    [Migration("20221120173753_PrimeiraMigration")]
     partial class PrimeiraMigration
     {
         /// <inheritdoc />
@@ -32,6 +32,13 @@ namespace EGestor.Infra.Migrations
 
                     b.Property<bool>("Ativo")
                         .HasColumnType("bit");
+
+                    b.Property<decimal>("LimiteCredito")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Observacao")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<Guid>("PessoaId")
                         .HasColumnType("uniqueidentifier");
@@ -56,6 +63,50 @@ namespace EGestor.Infra.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Funcao", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("37c4aa84-746d-4856-9f64-d0d9891df1b9"),
+                            Descricao = "ADMINISTRADOR"
+                        },
+                        new
+                        {
+                            Id = new Guid("3847181b-2014-43df-a92b-1d4644871757"),
+                            Descricao = "DESENVOLVEDOR"
+                        },
+                        new
+                        {
+                            Id = new Guid("17ee9760-3dc0-43bc-9f60-a0520370a5a0"),
+                            Descricao = "FUNCIONÁRIO"
+                        },
+                        new
+                        {
+                            Id = new Guid("bd3ab10d-da53-4444-817d-5f8593667921"),
+                            Descricao = "CLIENTE"
+                        });
+                });
+
+            modelBuilder.Entity("EGestor.Domain.Entities.Funcionario", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DataAdmissao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Observacao")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<Guid>("PessoaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PessoaId");
+
+                    b.ToTable("Funcionario", (string)null);
                 });
 
             modelBuilder.Entity("EGestor.Domain.Entities.Lancamento", b =>
@@ -66,12 +117,17 @@ namespace EGestor.Infra.Migrations
                     b.Property<DateTime>("Criacao")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("LancamentoId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("UsuarioId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Criacao");
+
+                    b.HasIndex("LancamentoId");
 
                     b.HasIndex("UsuarioId");
 
@@ -118,13 +174,13 @@ namespace EGestor.Infra.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("FuncionarioId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<Guid>("PessoaId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Senha")
                         .IsRequired()
@@ -133,7 +189,7 @@ namespace EGestor.Infra.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PessoaId");
+                    b.HasIndex("FuncionarioId");
 
                     b.ToTable("Usuario", (string)null);
                 });
@@ -164,8 +220,23 @@ namespace EGestor.Infra.Migrations
                     b.Navigation("Pessoa");
                 });
 
+            modelBuilder.Entity("EGestor.Domain.Entities.Funcionario", b =>
+                {
+                    b.HasOne("EGestor.Domain.Entities.Pessoa", "Pessoa")
+                        .WithMany("Funcionarios")
+                        .HasForeignKey("PessoaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pessoa");
+                });
+
             modelBuilder.Entity("EGestor.Domain.Entities.Lancamento", b =>
                 {
+                    b.HasOne("EGestor.Domain.Entities.Lancamento", null)
+                        .WithMany("Lancamentos")
+                        .HasForeignKey("LancamentoId");
+
                     b.HasOne("EGestor.Domain.Entities.Usuario", "Usuario")
                         .WithMany("Lancamentos")
                         .HasForeignKey("UsuarioId")
@@ -177,13 +248,13 @@ namespace EGestor.Infra.Migrations
 
             modelBuilder.Entity("EGestor.Domain.Entities.Usuario", b =>
                 {
-                    b.HasOne("EGestor.Domain.Entities.Pessoa", "Pessoa")
+                    b.HasOne("EGestor.Domain.Entities.Funcionario", "Funcionario")
                         .WithMany("Usuarios")
-                        .HasForeignKey("PessoaId")
+                        .HasForeignKey("FuncionarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Pessoa");
+                    b.Navigation("Funcionario");
                 });
 
             modelBuilder.Entity("FuncaoUsuario", b =>
@@ -201,11 +272,21 @@ namespace EGestor.Infra.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("EGestor.Domain.Entities.Funcionario", b =>
+                {
+                    b.Navigation("Usuarios");
+                });
+
+            modelBuilder.Entity("EGestor.Domain.Entities.Lancamento", b =>
+                {
+                    b.Navigation("Lancamentos");
+                });
+
             modelBuilder.Entity("EGestor.Domain.Entities.Pessoa", b =>
                 {
                     b.Navigation("Clientes");
 
-                    b.Navigation("Usuarios");
+                    b.Navigation("Funcionarios");
                 });
 
             modelBuilder.Entity("EGestor.Domain.Entities.Usuario", b =>

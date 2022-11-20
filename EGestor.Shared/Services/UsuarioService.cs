@@ -1,5 +1,4 @@
 ﻿using EGestor.Domain.Commands;
-using EGestor.Domain.Entities;
 using EGestor.Domain.Queries;
 using EGestor.Domain.Repositories;
 using EGestor.Domain.Services;
@@ -23,7 +22,7 @@ public class UsuarioService : Notifiable, IUsuarioService
         _jwtService = jwtService;
     }
 
-    public async Task<CommandResult> autenticar(LoginCommand usuario)
+    public async Task<CommandResult> Autenticar(LoginCommand usuario)
     {
         var procura = await _repository.BuscarPorLogin(usuario.Login);
         if (procura == null)
@@ -42,7 +41,7 @@ public class UsuarioService : Notifiable, IUsuarioService
             return await Task.FromResult(new CommandResult(true, "Autenticado", usuarioLogado));
         }
 
-        return await Task.FromResult(new CommandResult(false, "Falha ao autenticar", new { Erro = "Usuario e/ou Senha incorretos" }));
+        return await Task.FromResult(new CommandResult(false, "Falha ao autenticar", new { Erro = "Usuário e/ou senha incorretos" }));
     }
 
     private bool ValidaEAtualizaHash(LoginCommand usuario, string hash)
@@ -75,5 +74,14 @@ public class UsuarioService : Notifiable, IUsuarioService
         }
 
         return await _mediator.Send(command);
+    }
+
+    public async Task<CommandResult> BuscarFuncoes()
+    {
+        var funcoes = await _repository.BuscarFuncoes();
+
+        return await Task.FromResult(
+            new CommandResult(true, "Consulta", funcoes.Select(x => new { x.Id, x.Descricao }).ToList())
+        );
     }
 }

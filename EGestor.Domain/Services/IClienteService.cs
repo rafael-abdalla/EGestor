@@ -1,7 +1,4 @@
-﻿using EGestor.Domain.Commands;
-using EGestor.Shared.Commands;
-
-namespace EGestor.Domain.Services;
+﻿namespace EGestor.Domain.Services;
 
 public interface IClienteService
 {

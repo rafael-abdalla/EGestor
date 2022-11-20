@@ -1,20 +1,18 @@
-﻿using EGestor.Shared.Commands;
-using FluentValidator;
-using FluentValidator.Validation;
+﻿using FluentValidator.Validation;
 
 namespace EGestor.Domain.Commands;
 
 public class InserirUsuarioCommand : Notifiable, ICommand
 {
-    public InserirUsuarioCommand(Guid pessoaId, string login, string senha)
+    public InserirUsuarioCommand(Guid funcionarioId, string login, string senha)
     {
-        PessoaId = pessoaId;
+        FuncionarioId = funcionarioId;
         Login = login;
         Senha = senha;
         Funcoes = new();
     }
 
-    public Guid PessoaId { get; set; }
+    public Guid FuncionarioId { get; set; }
     public string Login { get; set; }
     public string Senha { get; set; }
     public HashSet<Guid> Funcoes { get; set; }

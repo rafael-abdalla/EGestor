@@ -1,10 +1,4 @@
-﻿using EGestor.Domain.Commands;
-using EGestor.Domain.Entities;
-using EGestor.Domain.Repositories;
-using EGestor.Shared.Commands;
-using FluentValidator;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace EGestor.Domain.Handlers;
 
@@ -23,7 +17,7 @@ public class UsuarioHandler :
 
     public async Task<CommandResult> Handle(InserirUsuarioCommand command, CancellationToken cancellationToken)
     {
-        var usuario = new Usuario(command.Login, command.Senha, command.PessoaId);
+        var usuario = new Usuario(command.Login, command.Senha, command.FuncionarioId);
 
         ConverterSenhaEmHash(usuario);
 

@@ -5,6 +5,16 @@ namespace EGestor.Domain.Entities;
 
 public class Pessoa : Entity
 {
+    public Pessoa(Guid id, string nome, string apelido, string documento, string telefone, string email)
+    {
+        Id = id;
+        Nome = nome;
+        Apelido = apelido;
+        Documento = documento;
+        Telefone = telefone;
+        Email = email;
+    }
+
     public Pessoa(string nome, string apelido, string documento, string telefone, string email)
     {
         Nome = nome;
@@ -30,5 +40,5 @@ public class Pessoa : Entity
     public string Email { get; private set; }
 
     public virtual ICollection<Cliente> Clientes { get; set; } = null!;
-    public virtual ICollection<Usuario> Usuarios { get; set; } = null!;
+    public virtual ICollection<Funcionario> Funcionarios { get; set; } = null!;
 }

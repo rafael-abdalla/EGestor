@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using EGestor.Shared.Commands;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -17,11 +18,7 @@ public class ErrorController : ControllerBase
 
         var errorId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
 
-        var retorno = new {
-            Success = false,
-            Message = "Algo deu errado! Favor contatar o suporte.",
-            Data = new { Erro = exception?.Message }
-        };
+        var retorno = new CommandResult(false, "Algo deu errado! Favor contatar o suporte.", new { Erro = exception?.Message });
 
         return StatusCode(StatusCodes.Status500InternalServerError, retorno);
     }

@@ -1,11 +1,4 @@
-﻿using EGestor.Domain.Commands;
-using EGestor.Domain.Entities;
-using EGestor.Domain.Repositories;
-using EGestor.Shared.Commands;
-using FluentValidator;
-using MediatR;
-
-namespace EGestor.Domain.Handlers;
+﻿namespace EGestor.Domain.Handlers;
 
 public class ClienteHandler : 
     Notifiable,
@@ -23,7 +16,7 @@ public class ClienteHandler :
     public async Task<CommandResult> Handle(InserirClienteCommand command, CancellationToken cancellationToken)
     {
         var pessoa = new Pessoa(command.Nome, command.Apelido, command.Documento, command.Telefone, command.Email);
-        var cliente = new Cliente(pessoa.Id);
+        var cliente = new Cliente(pessoa.Id, command.LimiteCredito, command.Observacao);
 
         AddNotifications(pessoa.Notifications);
         AddNotifications(cliente.Notifications);
@@ -34,15 +27,7 @@ public class ClienteHandler :
                 new CommandResult(false, "Informe os campos abaixo", Notifications)
             );
         }
-
-        var retorno = new
-        {
-            cliente.Id,
-            pessoa.Nome,
-            pessoa.Apelido,
-            pessoa.Email,
-        };
-
+        
         cliente.Pessoa = pessoa;
 
         await _uow.BeginTransaction();
@@ -59,6 +44,10 @@ public class ClienteHandler :
             );
         }
 
-        return await Task.FromResult(new CommandResult(true, "Cadastrado", retorno));
+        var retorno = new { cliente.Id, pessoa.Nome, pessoa.Apelido, pessoa.Email };
+
+        return await Task.FromResult(
+            new CommandResult(true, "Cadastrado", retorno)
+        );
     }
 }

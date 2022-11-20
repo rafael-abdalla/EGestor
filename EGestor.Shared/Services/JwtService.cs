@@ -21,10 +21,7 @@ public class JwtService : IJwtService
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var chave = Encoding.ASCII.GetBytes(_configuration.GetSection("JWT:Secret").Value!);
-        var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, usuario.Login)
-            };
+        var claims = new List<Claim> { new Claim(ClaimTypes.Name, usuario.Login) };
         claims.AddRange(usuario.Funcoes.Select(x => new Claim(ClaimTypes.Role, x.Descricao)));
         var tokenDescriptor = new SecurityTokenDescriptor
         {
