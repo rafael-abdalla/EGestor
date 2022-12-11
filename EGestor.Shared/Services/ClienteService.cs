@@ -23,7 +23,7 @@ public class ClienteService : Notifiable, IClienteService
     public async Task<CommandResult> BuscarPorId(Guid id)
     {
         Cliente retorno = await _repository.BuscarPorId(id);
-        var procura = new ClienteProcuraRetorno(retorno.Id, retorno.Pessoa.Id, retorno.Pessoa.Nome, retorno.Pessoa.Apelido, retorno.Pessoa.Email, retorno.Ativo);
+        var procura = new ClienteProcuraRetorno(retorno.Id, retorno.Pessoa.Id, retorno.Pessoa.Documento, retorno.Pessoa.Nome, retorno.Pessoa.Email, retorno.LimiteCredito, retorno.Ativo);
         return new CommandResult(true, "Consulta", procura);
     }
 
@@ -32,7 +32,7 @@ public class ClienteService : Notifiable, IClienteService
         List<Cliente> retorno = await _repository.BuscarTodos();
 
         var clientes = retorno
-            .Select(x => new ClienteProcuraRetorno(x.Id, x.Pessoa.Id, x.Pessoa.Nome, x.Pessoa.Apelido, x.Pessoa.Email, x.Ativo))
+            .Select(x => new ClienteProcuraRetorno(x.Id, x.Pessoa.Id, x.Pessoa.Documento, x.Pessoa.Nome, x.Pessoa.Email, x.LimiteCredito, x.Ativo))
             .ToList();
 
         return new CommandResult(true, "Consulta", clientes);

@@ -1,12 +1,14 @@
 ﻿using EGestor.Domain.Commands;
 using EGestor.Domain.Services;
 using EGestor.Shared.Commands;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EGestor.Api.Controllers;
 
 [Route("v1/api/[controller]")]
 [ApiController]
+[Authorize(Roles = "DESENVOLVEDOR")]
 public class FuncionarioController : ControllerBase
 {
     private readonly IFuncionarioService _service;

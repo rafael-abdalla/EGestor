@@ -2,12 +2,15 @@
 using EGestor.Domain.Entities;
 using EGestor.Domain.Services;
 using EGestor.Shared.Commands;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace EGestor.Api.Controllers;
 
 [Route("v1/api/[controller]")]
 [ApiController]
+[Authorize(Roles = "DESENVOLVEDOR")]
 public class ClienteController : ControllerBase
 {
     private readonly IClienteService _service;

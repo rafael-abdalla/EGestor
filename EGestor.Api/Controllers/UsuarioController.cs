@@ -23,7 +23,11 @@ public class UsuarioController : ControllerBase
     [ProducesResponseType(typeof(CommandResult), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Inserir([FromBody] InserirUsuarioCommand command)
     {
-        return Ok(await _service.Inserir(command));
+        var retorno = await _service.Inserir(command);
+        if (retorno.Success)
+            return Ok();
+
+        return BadRequest(retorno);
     }
 
     [HttpPost]
